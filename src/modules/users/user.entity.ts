@@ -12,7 +12,7 @@ export class User {
   @Column()
   name!: string;
 
-    @Column()
+  @Column({nullable:false})
   role: RoleEnum;
 
   @Column({ select: false })

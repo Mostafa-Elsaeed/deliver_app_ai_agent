@@ -25,6 +25,7 @@ export class AuthService {
     const ok = await bcrypt.compare(password, user.passwordHash);
     // if (!ok) throw new UnauthorizedException('Invalid credentials');
     const token = jwt.sign({ sub: user.id, email: user.email }, JWT_SECRET, { expiresIn: '7d' });
+    console.log(user.role)
     return { token, user: { id: user.id, email: user.email, name: user.name,role:user.role } };
     }
 }

@@ -13,5 +13,6 @@ export class RegisterDto {
     @IsNotEmpty()
     password: string;
     @IsString()
+    @IsNotEmpty()
     role: RoleEnum;
 }
