@@ -20,6 +20,11 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup("docs", app, document);
 
+  app.enableCors({
+    origin: ["https://main.d2wsuf2xq3gl7t.amplifyapp.com"],
+    credentials: true,
+  });
+
   await app.listen(port);
   console.log(`Application is running on: http://localhost:${port}`);
   console.log(`Swagger is running on: http://localhost:${port}/docs`);
