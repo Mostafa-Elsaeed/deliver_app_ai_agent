@@ -3,7 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Review } from './review.entity';
 import { ReviewsService } from './reviews.service';
 import { ReviewsController } from './reviews.controller';
-import { EventsModule } from 'src/realtime/events.module';
+import { EventsModule } from ''../../realtime/events.module';';
 
 @Module({
   imports: [EventsModule,TypeOrmModule.forFeature([Review])],
