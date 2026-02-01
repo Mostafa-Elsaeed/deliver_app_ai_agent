@@ -3,6 +3,7 @@ import { UsersService } from '../users/users.service';
 import * as bcrypt from 'bcrypt';
 import * as jwt from 'jsonwebtoken';
 import { RegisterDto } from './dto/register-dto';
+import { LoginDto } from './dto/login-dto';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'dev-secret-change-me';
 
@@ -12,15 +13,19 @@ export class AuthService {
 
   async register(registerBody:RegisterDto) {
     const {email,name,password,role}=registerBody;
+    console.log(`Role is ${role}`)
     const existing = await this.users.findByEmail(email);
     if (existing) throw new UnauthorizedException('User already exists');
+    
     const user = await this.users.create(email, name, password,role);
     return { id: user.id, email: user.email, name: user.name };
   }
 
-  async login(email: string, password: string) {
+  async login(body: LoginDto) {
+    const {email,password}=body;
     const user = await this.users.findByEmail(email);
     console.log(email)
+    console.log(user)
     if (!user) throw new UnauthorizedException('Invalid credentials');
     const ok = await bcrypt.compare(password, user.passwordHash);
     // if (!ok) throw new UnauthorizedException('Invalid credentials');

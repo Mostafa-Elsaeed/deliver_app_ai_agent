@@ -13,7 +13,7 @@ export class User {
   name!: string;
 
   @Column({nullable:false})
-  role: RoleEnum;
+  role!: RoleEnum;
 
   @Column({ select: false })
   passwordHash!: string;

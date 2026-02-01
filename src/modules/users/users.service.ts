@@ -11,12 +11,16 @@ export class UsersService {
   constructor(@InjectRepository(User) private repo: Repository<User>) {}
 
   findByEmail(email: string) {
-    return this.repo.findOne({ where: { email }, select: ['id', 'email', 'name', 'passwordHash'] });
+    return this.repo.findOne({ where: { email }, select: {id:true, email:true, name:true, passwordHash:true,role:true} });
   }
 
   async create(email: string, name: string, password: string,role:RoleEnum) {
+    console.log(`Role is ${role}`)
     const passwordHash = await bcrypt.hash(password, 10);
-    const user = this.repo.create({ email, name, passwordHash,role });
+    const user = this.repo.create({ email:email,
+      name:name,
+      passwordHash:passwordHash,
+      role:role });
     return this.repo.save(user);
   }
 
