@@ -21,8 +21,10 @@ async function bootstrap() {
   SwaggerModule.setup("docs", app, document);
 
   app.enableCors({
-    origin: ["https://main.d2wsuf2xq3gl7t.amplifyapp.com"],
+    origin: ["https://bidrunners.com", "https://www.bidrunners.com"],
     credentials: true,
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS",
+    allowedHeaders: "Content-Type, Authorization",
   });
 
   await app.listen(port);
