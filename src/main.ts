@@ -21,7 +21,11 @@ async function bootstrap() {
   SwaggerModule.setup("docs", app, document);
 
   app.enableCors({
-    origin: ["*"],
+    origin: [
+      "https://bidrunners.com",
+      "https://www.bidrunners.com",
+      "http://localhost:3001",
+    ],
     credentials: true,
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS",
     allowedHeaders: "Content-Type, Authorization",
