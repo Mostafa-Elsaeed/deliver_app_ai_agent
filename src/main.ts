@@ -7,7 +7,7 @@ import { ConfigService } from "./modules/config/config.service";
 import { ValidationPipe } from "@nestjs/common";
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule, { cors: true });
+  const app = await NestFactory.create(AppModule);
   app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
   const configService = app.get(ConfigService);
   const port = configService.app.port;
@@ -23,8 +23,14 @@ async function bootstrap() {
   SwaggerModule.setup("docs", app, document);
 
   app.enableCors({
-    origin: ["https://main.d2wsuf2xq3gl7t.amplifyapp.com"],
+    origin: [
+      "https://bidrunners.com",
+      "https://www.bidrunners.com",
+      "http://localhost:3001",
+    ],
     credentials: true,
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS",
+    allowedHeaders: "Content-Type, Authorization",
   });
 
   await app.listen(port);
