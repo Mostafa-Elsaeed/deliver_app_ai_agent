@@ -27,6 +27,8 @@ async function bootstrap() {
       "https://bidrunners.com",
       "https://www.bidrunners.com",
       "http://localhost:3001",
+      "http://localhost:3000",
+      "http://localhost:5173",
     ],
     credentials: true,
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS",

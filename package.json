@@ -22,6 +22,7 @@
     "class-validator": "^0.14.3",
     "jsonwebtoken": "^9.0.2",
     "pg": "^8.18.0",
+    "pg-connection-string": "^2.11.0",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1",
     "socket.io": "^4.7.5",

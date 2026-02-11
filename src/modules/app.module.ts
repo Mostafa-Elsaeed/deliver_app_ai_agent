@@ -18,7 +18,7 @@ import { AppController } from "./app.controller";
 @Module({
   imports: [
     ConfigModule,
-TypeOrmModule.forRootAsync({
+    TypeOrmModule.forRootAsync({
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
         type: configService.database.type as any,
@@ -28,7 +28,15 @@ TypeOrmModule.forRootAsync({
         password: configService.database.password,
         database: configService.database.database,
         autoLoadEntities: true,
-        synchronize: configService.app.nodeEnv === 'development',
+        synchronize: configService.app.nodeEnv === "development",
+        ssl: configService.database.ssl ? true : false,
+        extra: configService.database.ssl
+          ? {
+              ssl: {
+                rejectUnauthorized: false,
+              },
+            }
+          : undefined,
       }),
     }),
     UsersModule,

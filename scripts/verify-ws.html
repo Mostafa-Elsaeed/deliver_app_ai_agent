@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WebSocket Verification</title>
+    <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+    <style>
+      body {
+        font-family: sans-serif;
+        padding: 20px;
+      }
+      #log {
+        border: 1px solid #ccc;
+        padding: 10px;
+        height: 300px;
+        overflow-y: scroll;
+        background: #f9f9f9;
+      }
+      .event {
+        margin-bottom: 5px;
+        border-bottom: 1px solid #eee;
+        padding-bottom: 5px;
+      }
+      .timestamp {
+        color: #888;
+        font-size: 0.8em;
+      }
+      .success {
+        color: green;
+      }
+      .error {
+        color: red;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>WebSocket Verification</h1>
+    <div>Status: <span id="status">Disconnected</span></div>
+    <button id="triggerBtn">Trigger Test Event</button>
+    <div id="log"></div>
+
+    <script>
+      const logDiv = document.getElementById("log");
+      const statusSpan = document.getElementById("status");
+
+      function log(message, type = "info") {
+        const div = document.createElement("div");
+        div.className = `event ${type}`;
+        div.innerHTML = `<span class="timestamp">${new Date().toISOString()}</span> [${type}] ${message}`;
+        logDiv.prepend(div);
+        console.log(`[${type}] ${message}`);
+      }
+
+      // Connect to the WebSocket server on port 3002
+      const socket = io("http://localhost:3002");
+
+      socket.on("connect", () => {
+        statusSpan.innerText = "Connected";
+        statusSpan.style.color = "green";
+        log("Connected to WebSocket server");
+      });
+
+      socket.on("disconnect", () => {
+        statusSpan.innerText = "Disconnected";
+        statusSpan.style.color = "red";
+        log("Disconnected from WebSocket server");
+      });
+
+      socket.on("connect_error", (err) => {
+        statusSpan.innerText = "Error";
+        statusSpan.style.color = "red";
+        log(`Connection error: ${err.message}`, "error");
+      });
+
+      // Listen for specific events
+      const events = [
+        "messages.created",
+        "orders.created",
+        "orders.updated",
+        "bids.created",
+        "bids.updated",
+        "wallets.updated",
+        "reviews.created",
+      ];
+
+      events.forEach((event) => {
+        socket.on(event, (data) => {
+          log(
+            `Received event: <strong>${event}</strong> <pre>${JSON.stringify(data, null, 2)}</pre>`,
+            "success",
+          );
+        });
+      });
+
+      // Trigger event button
+      document
+        .getElementById("triggerBtn")
+        .addEventListener("click", async () => {
+          try {
+            const response = await fetch("http://localhost:3002/test-event", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                event: "messages.created",
+                payload: { text: "Hello from verification script" },
+              }),
+            });
+            const result = await response.json();
+            log(`Triggered event via API: ${JSON.stringify(result)}`);
+          } catch (err) {
+            log(`Error triggering event: ${err.message}`, "error");
+          }
+        });
+    </script>
+  </body>
+</html>
